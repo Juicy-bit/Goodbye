@@ -152,6 +152,58 @@
       font-style: italic;
       color: #aa4a5d;
     }
+
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: #ffc6d0;
+      transform: rotate(45deg);
+      animation: floatHearts 8s linear infinite;
+      opacity: 0.5;
+      z-index: 1000;
+    }
+
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ffc6d0;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatHearts {
+      0% { transform: translateY(0) rotate(45deg); opacity: 0.6; }
+      100% { transform: translateY(-120vh) rotate(45deg); opacity: 0; }
+    }
+
+    .home-title {
+      font-size: 3em;
+      color: #e25573;
+      position: absolute;
+      top: 30%;
+      text-align: center;
+      width: 100%;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
@@ -160,12 +212,19 @@
   <source src="You'll Be in My Heart (Spotify Singles).mp3" type="audio/mpeg">
 </audio>
 
+<!-- Floating hearts -->
+<div class="heart" style="left: 20%; animation-delay: 0s;"></div>
+<div class="heart" style="left: 50%; animation-delay: 2s;"></div>
+<div class="heart" style="left: 80%; animation-delay: 4s;"></div>
+
 <div class="house-scene">
   <div class="door" onclick="enterHouse()"></div>
   <p style="color:#e25573; font-weight: bold; margin-top: 20px;">Click the house to enter</p>
 </div>
 
 <div class="main-scene">
+  <div class="home-title" id="homeTitle">You Are My Home</div>
+
   <div class="slideshow" id="memoryShow">
     <img class="slide" src="1.jpeg" />
     <img class="slide" src="2.jpeg" />
@@ -184,16 +243,8 @@
     <div class="quote">"If I had a flower for every time I thought of you... I could walk through my garden forever."</div>
     <img src="her anime.jpeg" alt="Her image" />
     <div class="message">
-      Last February, you came into my life and we started talking. I never knew that would be the beginning of our story.
-      From you wishing me happy birthday to talking every single day, each moment became a memory I’ll always cherish.
-      We fought—many times. But somehow, we always found our way back. Even after we broke up once, we managed to reconnect, and this time, we both promised to give it our all. I know I did.
-      You told me you’d choose me at the end of the day, and that made me feel so excited for our future. But then… we fought again.
-      And now, we’re on separate paths once more. Love isn’t something you throw away when it gets hard. That’s why I tried so hard to hold on.
-      Even though I know we won’t meet again, I miss you—so much. I don’t know how I’m going to live each day without you.
-      Maybe you’ll be able to move on… but I can’t. I don’t know how long it’ll take to heal.
-      Last night, I wished everything was just a dream. I wanted us to fall asleep on call, like we always used to. But this morning,
-      when our call ended, I felt it in my heart—it was really the end. I hesitated to say goodbye. I even thought about ending everything just so I could die with the memory of you by my side… but I stopped. Because I knew how much it would hurt you.
-      I always believed in miracles. I still do. I still hope I can find my way back to you. Please forgive me for not moving on. I only ever wanted <strong>you</strong> in my life.
+      Last February, you came into my life and we started talking...
+      <br/><br/>
       Thank you, Christy. Thank you, my greatest gift. 💔
     </div>
     <div class="footer-note">Sorry for lying to you, but I really cannot move on from you.</div>
@@ -208,8 +259,15 @@
 
   function enterHouse() {
     document.body.classList.add("show-main");
-    document.querySelector(".slideshow").style.display = "flex";
-    startSlideshow();
+
+    // Show "You Are My Home" title briefly
+    const title = document.getElementById("homeTitle");
+    title.style.display = "block";
+    setTimeout(() => {
+      title.style.display = "none";
+      document.querySelector(".slideshow").style.display = "flex";
+      startSlideshow();
+    }, 3000);
   }
 
   let current = 0;
