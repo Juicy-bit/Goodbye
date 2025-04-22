@@ -5,308 +5,192 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>You Are My Greatest Gift</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body, html {
       font-family: 'Segoe UI', sans-serif;
       background-color: #fff4f0;
       color: #333;
-      overflow-x: hidden;
+      scroll-behavior: smooth;
     }
 
-    .house-scene, .main-scene {
+    .house-scene, .slideshow-scene, .main-scene {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
       transition: opacity 1s ease, transform 1s ease;
     }
 
-    .house-scene {
-      z-index: 10;
-      flex-direction: column;
-    }
-
-    .main-scene {
-      opacity: 0;
-      transform: scale(0.95);
-      z-index: 0;
-      flex-direction: column;
-    }
-
-    .show-main .main-scene {
-      opacity: 1;
-      transform: scale(1);
-      z-index: 5;
-    }
-
-    .show-main .house-scene {
-      opacity: 0;
-      transform: scale(1.1);
-      z-index: 0;
-    }
-
-    .door {
-      width: 240px;
-      height: 240px;
-      background-image: url('anime-house.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      border-radius: 12px;
+    .house-scene img {
+      width: 220px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: transform 0.3s ease;
+      border-radius: 12px;
     }
 
-    .door:hover {
+    .house-scene img:hover {
       transform: scale(1.05);
     }
 
-    .slideshow {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      width: 100vw;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background: #fff4f0;
-      z-index: 99;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      max-height: 90vh;
-      object-fit: contain;
-      opacity: 0;
-      transform: scale(1);
-      transition: opacity 1s ease, transform 2s ease;
-      margin: auto;
-    }
-
-    .slide.active {
-      opacity: 1;
-      transform: scale(1.05);
-      z-index: 5;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 80px auto 40px;
-      padding: 20px;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .container.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade-out { opacity: 0; pointer-events: none; }
+    .fade-in { opacity: 1; pointer-events: auto; }
 
     h1 {
-      color: #e25573;
       font-size: 2.5em;
-      margin-bottom: 10px;
+      color: #e25573;
+      margin: 20px 0 10px;
+      animation: fadeIn 2s ease forwards;
     }
 
     .quote {
       font-style: italic;
-      color: #aa4a5d;
+      color: #d67777;
       margin-bottom: 20px;
-      font-size: 1.2em;
-    }
-
-    img {
-      max-width: 100%;
-      max-height: 350px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255, 204, 204, 0.5);
-      margin-top: 20px;
     }
 
     .message {
-      background: rgba(255, 255, 255, 0.5);
-      padding: 20px;
-      border-radius: 10px;
+      background: rgba(255,255,255,0.95);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 800px;
       margin-top: 20px;
-      text-align: left;
-      box-shadow: 0 0 10px rgba(255, 204, 204, 0.2);
-      line-height: 1.6;
+      line-height: 1.7;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
     }
 
     .footer-note {
-      margin-top: 30px;
+      margin-top: 20px;
+      color: #d46666;
       font-style: italic;
-      color: #aa4a5d;
     }
 
     .heart {
-      position: fixed;
+      position: absolute;
       width: 20px;
       height: 20px;
-      background-color: #ffc6d0;
+      background-color: #ffd6dc;
       transform: rotate(45deg);
       animation: floatHearts 8s linear infinite;
       opacity: 0.5;
-      z-index: 1000;
+      top: 100%;
     }
 
     .heart::before, .heart::after {
       content: '';
       position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: #ffc6d0;
+      width: 20px; height: 20px;
+      background-color: #ffd6dc;
       border-radius: 50%;
     }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: -10px;
-      top: 0;
-    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
 
     @keyframes floatHearts {
-      0% { transform: translateY(0) rotate(45deg); opacity: 0.6; }
+      0% { transform: translateY(0) rotate(45deg); opacity: 0.5; }
       100% { transform: translateY(-120vh) rotate(45deg); opacity: 0; }
     }
 
-    .home-title {
-      font-size: 3em;
-      color: #e25573;
-      position: absolute;
-      top: 30%;
-      text-align: center;
-      width: 100%;
-      opacity: 0;
-      animation: fadeIn 2s ease forwards;
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+    img.memory {
+      width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      animation: zoom 1s ease;
     }
+
+    @keyframes zoom {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .hidden { display: none; }
   </style>
 </head>
 <body>
 
-<audio id="bg-music" autoplay loop>
+<audio autoplay loop>
   <source src="You'll Be in My Heart (Spotify Singles).mp3" type="audio/mpeg">
 </audio>
 
-<!-- Floating hearts -->
 <div class="heart" style="left: 20%; animation-delay: 0s;"></div>
 <div class="heart" style="left: 50%; animation-delay: 2s;"></div>
 <div class="heart" style="left: 80%; animation-delay: 4s;"></div>
 
-<div class="house-scene">
-  <div class="door" onclick="enterHouse()"></div>
-  <p style="color:#e25573; font-weight: bold; margin-top: 20px;">Click the house to enter</p>
+<!-- House Scene -->
+<div class="house-scene" id="houseScene">
+  <img src="anime-house.png" alt="House" onclick="startSlideshow()">
+  <p style="color: #999; margin-top: 12px;">Click the house to enter</p>
 </div>
 
-<div class="main-scene">
-  <div class="home-title" id="homeTitle">You Are My Home</div>
+<!-- Slideshow Scene -->
+<div class="slideshow-scene fade-out" id="slideshowScene">
+  <h1 id="titleLine" class="hidden">You Are My Home</h1>
+  <img id="memoryImage" class="memory" src="" />
+</div>
 
-  <div class="slideshow" id="memoryShow">
-    <img class="slide" src="1.jpeg" />
-    <img class="slide" src="2.jpeg" />
-    <img class="slide" src="3.jpeg" />
-    <img class="slide" src="4.jpeg" />
-    <img class="slide" src="5.jpeg" />
-    <img class="slide" src="6.jpeg" />
-    <img class="slide" src="7.jpeg" />
-    <img class="slide" src="8.jpeg" />
-    <img class="slide" src="9.jpeg" />
-    <img class="slide" src="10.jpeg" />
-  </div>
-
-  <div class="container" id="letterContent">
-  <h1 style="margin-top: 40px;">You Are My Greatest Gift</h1>
+<!-- Main Message Scene -->
+<div class="main-scene fade-out" id="mainScene">
+  <h1>You Are My Greatest Gift</h1>
   <div class="quote">"If I had a flower for every time I thought of you... I could walk through my garden forever."</div>
-    <img src="her anime.jpeg" alt="Her image" />
-    <div class="message">
-  Last February, you came into my life and we started talking. I never knew that would be the beginning of our story. From you wishing me happy birthday to talking every single day, each moment became a memory I’ll always cherish.
-  <br><br>
-  We fought—many times. But somehow, we always found our way back to each other. Even after we broke up once, we managed to reconnect, and this time, we both promised to give it our all. I know I did.
-  <br><br>
-  You told me you’d choose me at the end of the day, and that made me feel so excited for our future. But then… we fought again. And now, we’re on separate paths once more.
-  <br><br>
-  Love isn’t something you throw away when it gets hard. That’s why I tried so hard to hold on. Even though I know we won’t meet again, I miss you—so much. I don’t know how I’m going to live each day without you. Maybe you’ll be able to move on… but I can’t. I don’t know how long it’ll take to heal.
-  <br><br>
-  Last night, I wished everything was just a dream. I wanted us to fall asleep on call, like we always used to. But this morning, when our call ended, I felt it in my heart—it was really the end. I hesitated to say goodbye. I even thought about ending everything just so I could die with the memory of you by my side… but I stopped. Because I knew how much it would hurt you.
-  <br><br>
-  I always believed in miracles. I still do. I still hope I can find my way back to you. Please forgive me for not moving on. I only ever wanted <strong>you</strong> in my life.
-  <br><br>
-  Thank you, Christy. Thank you, my greatest gift. 💔
-</div>
-    <div class="footer-note">Sorry for lying to you, but I really cannot move on from you.</div>
+  <img src="her anime.jpeg" alt="Her Image">
+  <div class="message">
+    Last February, you came into my life and we started talking. I never knew that would be the beginning of our story. From you wishing me happy birthday to talking every single day, each moment became a memory I’ll always cherish.<br><br>
+    We fought—many times. But somehow, we always found our way back to each other. Even after we broke up once, we managed to reconnect, and this time, we both promised to give it our all. I know I did.<br><br>
+    You told me you’d choose me at the end of the day, and that made me feel so excited for our future. But then… we fought again. And now, we’re on separate paths once more.<br><br>
+    Love isn’t something you throw away when it gets hard. That’s why I tried so hard to hold on. Even though I know we won’t meet again, I miss you—so much. I don’t know how I’m going to live each day without you. Maybe you’ll be able to move on… but I can’t. I don’t know how long it’ll take to heal.<br><br>
+    Last night, I wished everything was just a dream. I wanted us to fall asleep on call, like we always used to. But this morning, when our call ended, I felt it in my heart—it was really the end. I hesitated to say goodbye. I even thought about ending everything just so I could die with the memory of you by my side… but I stopped. Because I knew how much it would hurt you.<br><br>
+    I always believed in miracles. I still do. I still hope I can find my way back to you. Please forgive me for not moving on. I only ever wanted <strong>you</strong> in my life.<br><br>
+    Thank you, Christy. Thank you, my greatest gift. 💔
   </div>
+  <div class="footer-note">Sorry for lying to you, but I really cannot move on from you.</div>
 </div>
 
 <script>
-  const music = document.getElementById("bg-music");
-  document.addEventListener("click", () => {
-    if (music.paused) music.play().catch(()=>{});
-  });
+  const memoryImages = ["1.jpeg","2.jpeg","3.jpeg","4.jpeg","5.jpeg","6.jpeg","7.jpeg","8.jpeg","9.jpeg","10.jpeg"];
+  let index = 0;
 
-  function enterHouse() {
-    document.body.classList.add("show-main");
-
-    // Show "You Are My Home" title briefly
-    const title = document.getElementById("homeTitle");
-    title.style.display = "block";
-    setTimeout(() => {
-      title.style.display = "none";
-      document.querySelector(".slideshow").style.display = "flex";
-      startSlideshow();
-    }, 3000);
-  }
-
-  let current = 0;
   function startSlideshow() {
-    const slides = document.querySelectorAll('.slide');
-    const slideshow = document.getElementById("memoryShow");
-    if (slides.length === 0) return;
-    slides[current].classList.add('active');
+    document.getElementById("houseScene").classList.add("fade-out");
+    const show = document.getElementById("slideshowScene");
+    show.classList.remove("fade-out");
+    show.classList.add("fade-in");
 
-    const interval = setInterval(() => {
-      slides[current].classList.remove('active');
-      current++;
-      if (current >= slides.length) {
-        clearInterval(interval);
-        slideshow.remove();
-        const content = document.getElementById("letterContent");
-        content.classList.add("show");
-        setTimeout(() => {
-          window.scrollTo({ top: content.offsetTop - 50, behavior: 'smooth' });
-        }, 300);
-        return;
-      }
-      slides[current].classList.add('active');
-    }, 4000);
+    const title = document.getElementById("titleLine");
+    title.classList.remove("hidden");
+    setTimeout(() => {
+      nextImage();
+    }, 1000);
   }
 
-  window.onload = () => {
-    music.play().catch(() => {});
-  };
+  function nextImage() {
+    const img = document.getElementById("memoryImage");
+    img.src = memoryImages[index];
+    index++;
+    if (index < memoryImages.length) {
+      setTimeout(nextImage, 3000);
+    } else {
+      setTimeout(() => {
+        document.getElementById("slideshowScene").classList.remove("fade-in");
+        document.getElementById("slideshowScene").classList.add("fade-out");
+
+        const main = document.getElementById("mainScene");
+        main.classList.remove("fade-out");
+        main.classList.add("fade-in");
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 3500);
+    }
+  }
 </script>
 
 </body>
