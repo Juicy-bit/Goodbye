@@ -5,84 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>You Are My Greatest Gift</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body, html {
+    * {{
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }}
+    body, html {{
       font-family: 'Segoe UI', sans-serif;
       background-color: #fff4f0;
       color: #333;
       overflow-x: hidden;
-    }
-
-    h1 {
-      color: #e25573;
-      margin: 30px 0 10px;
-      font-size: 2.5em;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .quote {
-      font-style: italic;
-      color: #aa4a5d;
-      margin-bottom: 20px;
-      font-size: 1.2em;
-      text-align: center;
-    }
-
-    .message {
-      background: rgba(255, 255, 255, 0.5);
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-      text-align: left;
-      box-shadow: 0 0 10px rgba(255, 204, 204, 0.2);
-      line-height: 1.6;
-    }
-
-    .footer-note {
-      margin-top: 30px;
-      font-style: italic;
-      color: #aa4a5d;
-      text-align: center;
-    }
-
-    img {
-      max-width: 100%;
-      max-height: 350px;
-      display: block;
-      margin: 20px auto;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255, 204, 204, 0.5);
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .container.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .slideshow {
+    }}
+    .house-scene, .main-scene {{
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1s ease, transform 1s ease;
+    }}
+    .house-scene {{
+      z-index: 10;
+      flex-direction: column;
+    }}
+    .main-scene {{
+      opacity: 0;
+      transform: scale(0.95);
+      z-index: 0;
+      flex-direction: column;
+    }}
+    .show-main .main-scene {{
+      opacity: 1;
+      transform: scale(1);
+      z-index: 5;
+    }}
+    .show-main .house-scene {{
+      opacity: 0;
+      transform: scale(1.1);
+      z-index: 0;
+    }}
+    .door {{
+      width: 200px;
+      height: 200px;
+      background-image: url('anime-house.png');
+      background-size: cover;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }}
+    .door:hover {{
+      transform: scale(1.05);
+    }}
+    .slideshow {{
+      display: none;
       justify-content: center;
       align-items: center;
       width: 100vw;
       height: 100vh;
       position: fixed;
-      top: 0; left: 0;
-      z-index: 99;
+      top: 0;
+      left: 0;
       background: #fff4f0;
-    }
-
-    .slide {
+      z-index: 99;
+    }}
+    .slide {{
       position: absolute;
       width: 100%;
       max-width: 600px;
@@ -93,17 +81,57 @@
       transform: scale(1);
       transition: opacity 1s ease, transform 2s ease;
       margin: auto;
-    }
-
-    .slide.active {
+    }}
+    .slide.active {{
       opacity: 1;
       transform: scale(1.05);
       z-index: 5;
-    }
-
-    audio {
-      display: none;
-    }
+    }}
+    .container {{
+      max-width: 800px;
+      margin: 80px auto 40px;
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }}
+    .container.show {{
+      opacity: 1;
+      transform: translateY(0);
+    }}
+    h1 {{
+      color: #e25573;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }}
+    .quote {{
+      font-style: italic;
+      color: #aa4a5d;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+    }}
+    img {{
+      max-width: 100%;
+      max-height: 350px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 204, 204, 0.5);
+      margin-top: 20px;
+    }}
+    .message {{
+      background: rgba(255, 255, 255, 0.5);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: left;
+      box-shadow: 0 0 10px rgba(255, 204, 204, 0.2);
+      line-height: 1.6;
+    }}
+    .footer-note {{
+      margin-top: 30px;
+      font-style: italic;
+      color: #aa4a5d;
+    }}
   </style>
 </head>
 <body>
@@ -112,68 +140,78 @@
   <source src="You'll Be in My Heart (Spotify Singles).mp3" type="audio/mpeg">
 </audio>
 
-<div class="slideshow" id="memoryShow">
-  <img class="slide" src="1.jpeg" />
-  <img class="slide" src="2.jpeg" />
-  <img class="slide" src="3.jpeg" />
-  <img class="slide" src="4.jpeg" />
-  <img class="slide" src="5.jpeg" />
-  <img class="slide" src="6.jpeg" />
-  <img class="slide" src="7.jpeg" />
-  <img class="slide" src="8.jpeg" />
-  <img class="slide" src="9.jpeg" />
-  <img class="slide" src="10.jpeg" />
+<div class="house-scene">
+  <div class="door" onclick="enterHouse()"></div>
+  <p style="color:#e25573; font-weight: bold; margin-top: 20px;">Click the house to enter</p>
 </div>
 
-<div class="container" id="letterContent">
-  <h1>You Are My Greatest Gift</h1>
-  <div class="quote">"If I had a flower for every time I thought of you... I could walk through my garden forever."</div>
-  <img src="her anime.jpeg" alt="Her image" />
-  <div class="message">
-    Last February, you came into my life and we started talking. I never knew that would be the beginning of our story.
-    From you wishing me happy birthday to talking every single day, each moment became a memory I’ll always cherish.
-    We fought—many times. But somehow, we always found our way back. Even after we broke up once, we managed to reconnect, and this time, we both promised to give it our all. I know I did.
-    You told me you’d choose me at the end of the day, and that made me feel so excited for our future. But then… we fought again.
-    And now, we’re on separate paths once more. Love isn’t something you throw away when it gets hard. That’s why I tried so hard to hold on.
-    Even though I know we won’t meet again, I miss you—so much. I don’t know how I’m going to live each day without you.
-    Maybe you’ll be able to move on… but I can’t. I don’t know how long it’ll take to heal.
-    Last night, I wished everything was just a dream. I wanted us to fall asleep on call, like we always used to. But this morning,
-    when our call ended, I felt it in my heart—it was really the end. I hesitated to say goodbye. I even thought about ending everything just so I could die with the memory of you by my side… but I stopped. Because I knew how much it would hurt you.
-    I always believed in miracles. I still do. I still hope I can find my way back to you. Please forgive me for not moving on. I only ever wanted <strong>you</strong> in my life.
-    Thank you, Christy. Thank you, my greatest gift. 💔
+<div class="main-scene">
+  <div class="slideshow" id="memoryShow">
+    <img class="slide" src="1.jpeg" />
+    <img class="slide" src="2.jpeg" />
+    <img class="slide" src="3.jpeg" />
+    <img class="slide" src="4.jpeg" />
+    <img class="slide" src="5.jpeg" />
+    <img class="slide" src="6.jpeg" />
+    <img class="slide" src="7.jpeg" />
+    <img class="slide" src="8.jpeg" />
+    <img class="slide" src="9.jpeg" />
+    <img class="slide" src="10.jpeg" />
   </div>
-  <div class="footer-note">Sorry for lying to you, but I really cannot move on from you.</div>
+
+  <div class="container" id="letterContent">
+    <h1>You Are My Greatest Gift</h1>
+    <div class="quote">"If I had a flower for every time I thought of you... I could walk through my garden forever."</div>
+    <img src="her anime.jpeg" alt="Her image" />
+    <div class="message">
+      Last February, you came into my life and we started talking. I never knew that would be the beginning of our story.
+      From you wishing me happy birthday to talking every single day, each moment became a memory I’ll always cherish.
+      We fought—many times. But somehow, we always found our way back. Even after we broke up once, we managed to reconnect, and this time, we both promised to give it our all. I know I did.
+      You told me you’d choose me at the end of the day, and that made me feel so excited for our future. But then… we fought again.
+      And now, we’re on separate paths once more. Love isn’t something you throw away when it gets hard. That’s why I tried so hard to hold on.
+      Even though I know we won’t meet again, I miss you—so much. I don’t know how I’m going to live each day without you.
+      Maybe you’ll be able to move on… but I can’t. I don’t know how long it’ll take to heal.
+      Last night, I wished everything was just a dream. I wanted us to fall asleep on call, like we always used to. But this morning,
+      when our call ended, I felt it in my heart—it was really the end. I hesitated to say goodbye. I even thought about ending everything just so I could die with the memory of you by my side… but I stopped. Because I knew how much it would hurt you.
+      I always believed in miracles. I still do. I still hope I can find my way back to you. Please forgive me for not moving on. I only ever wanted <strong>you</strong> in my life.
+      Thank you, Christy. Thank you, my greatest gift. 💔
+    </div>
+    <div class="footer-note">Sorry for lying to you, but I really cannot move on from you.</div>
+  </div>
 </div>
 
 <script>
   const music = document.getElementById("bg-music");
-  document.addEventListener("click", () => {
-    if (music.paused) music.play().catch(()=>{});
-  });
+  document.addEventListener("click", () => {{
+    if (music.paused) music.play().catch(()=>{{}});
+  }});
+
+  function enterHouse() {{
+    document.body.classList.add("show-main");
+    document.querySelector(".slideshow").style.display = "flex";
+    startSlideshow();
+  }}
 
   let current = 0;
-  function startSlideshow() {
+  function startSlideshow() {{
     const slides = document.querySelectorAll('.slide');
     const slideshow = document.getElementById("memoryShow");
     if (slides.length === 0) return;
     slides[current].classList.add('active');
-
-    const interval = setInterval(() => {
+    const interval = setInterval(() => {{
       slides[current].classList.remove('active');
       current++;
-      if (current >= slides.length) {
+      if (current >= slides.length) {{
         clearInterval(interval);
         slideshow.remove();
         const content = document.getElementById("letterContent");
         content.classList.add("show");
-        content.scrollIntoView({ behavior: 'smooth' });
+        content.scrollIntoView({{ behavior: 'smooth' }});
         return;
-      }
+      }}
       slides[current].classList.add('active');
-    }, 4000);
-  }
-
-  window.onload = startSlideshow;
+    }}, 4000);
+  }}
 </script>
 
 </body>
