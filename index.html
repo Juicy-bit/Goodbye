@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>You Are My Home</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body, html {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff4f0;
+      color: #333;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .house-scene {
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .main-scene {
+      opacity: 0;
+      transform: scale(0.95);
+      z-index: 0;
+      pointer-events: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .show-main .main-scene {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .show-main .house-scene {
+      opacity: 0;
+      transform: scale(1.1);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .title {
+      font-size: 3em;
+      font-weight: bold;
+      color: #e25573;
+      animation: fadeIn 2s ease-in-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .slideshow, .heart-layout {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      position: absolute;
+      top: 0; left: 0;
+    }
+
+    .slide, .heart-img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transform: scale(1);
+      transition: opacity 1s ease, transform 3s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 5;
+      transform: scale(1.05);
+    }
+
+    .heart-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      transition: transform 1.5s ease, opacity 1s ease;
+      opacity: 0;
+    }
+
+    .heart-layout.show .heart-img {
+      opacity: 1;
+    }
+
+    .love-letter {
+      display: none;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: fadeIn 2s ease-in-out forwards;
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+  <source src="You'll Be in My Heart (Spotify Singles).mp3" type="audio/mpeg">
+</audio>
+
+<div class="scene house-scene" onclick="enterHouse()">
+  <img src="anime-house.png" alt="Anime House" style="max-width: 300px; border-radius: 10px;" />
+  <p style="color: #e25573; font-weight: bold; margin-top: 20px;">Click the house to enter</p>
+</div>
+
+<div class="scene main-scene">
+  <div class="title" id="main-title">You Are My Home</div>
+</div>
+
+<div class="slideshow" id="memoryShow">
+  <img class="slide" src="1.jpeg">
+<img class="slide" src="2.jpeg">
+<img class="slide" src="3.jpeg">
+<img class="slide" src="4.jpeg">
+<img class="slide" src="5.jpeg">
+<img class="slide" src="6.jpeg">
+<img class="slide" src="7.jpeg">
+<img class="slide" src="8.jpeg">
+<img class="slide" src="10.jpeg">
+<img class="slide" src="11.jpeg">
+</div>
+
+<div class="heart-layout" id="heartLayout">
+  <img class="heart-img" src="1.jpeg" style="top:40%; left:45%">
+<img class="heart-img" src="2.jpeg" style="top:30%; left:42%">
+<img class="heart-img" src="3.jpeg" style="top:30%; left:48%">
+<img class="heart-img" src="4.jpeg" style="top:25%; left:39%">
+<img class="heart-img" src="5.jpeg" style="top:25%; left:51%">
+<img class="heart-img" src="6.jpeg" style="top:35%; left:35%">
+<img class="heart-img" src="7.jpeg" style="top:35%; left:55%">
+<img class="heart-img" src="8.jpeg" style="top:45%; left:38%">
+<img class="heart-img" src="9.jpeg" style="top:45%; left:52%">
+<img class="heart-img" src="10.jpeg" style="top:55%; left:45%">
+</div>
+
+<div class="love-letter" id="finalMessage">
+  <h2>Thank you, Christy. 💌</h2>
+  <p>
+    Last February, you came into my life and we started talking. I never knew that would be the beginning of our story.
+    From you wishing me happy birthday to talking every single day, each moment became a memory I’ll always cherish.
+    We fought—many times. But somehow, we always found our way back. Even after we broke up once, we managed to reconnect, and this time, we promised to give it our all.
+    You told me you’d choose me at the end of the day, and that made me excited for our future. But then… we fought again. And now, we’re on separate paths once more.
+    Love isn’t something you throw away when it gets hard. That’s why I held on. Even though I know we won’t meet again, I miss you—so much.
+    I don’t know how I’m going to live each day without you. Maybe you’ll be able to move on… but I can’t.
+    I always believed in miracles. I still do. I still hope I can find my way back to you. I only ever wanted <strong>you</strong> in my life.
+    Sorry for lying to you, but I really cannot move on from you.
+  </p>
+</div>
+
+<script>
+  function enterHouse() {
+    document.body.classList.add("show-main");
+    const music = document.getElementById("bg-music");
+    const title = document.getElementById("main-title");
+
+    if (music && music.paused) {
+      music.play().catch(err => console.log("Autoplay blocked"));
+    }
+
+    title.style.opacity = 1;
+    setTimeout(() => {
+      document.querySelector(".main-scene").style.display = "none";
+      document.getElementById("memoryShow").style.display = "block";
+      startSlideshow();
+    }, 2500);
+  }
+
+  let current = 0;
+  function startSlideshow() {
+    const slides = document.querySelectorAll('.slide');
+    if (slides.length === 0) return;
+    slides[current].classList.add('active');
+    const interval = setInterval(() => {
+      slides[current].classList.remove('active');
+      current += 1;
+      if (current >= slides.length) {
+        clearInterval(interval);
+        document.getElementById("memoryShow").style.display = "none";
+        showHeart();
+        return;
+      }
+      slides[current].classList.add('active');
+    }, 4000);
+  }
+
+  function showHeart() {
+    const layout = document.getElementById("heartLayout");
+    layout.style.display = "block";
+    layout.classList.add("show");
+    setTimeout(() => {
+      document.getElementById("finalMessage").style.display = "block";
+    }, 2500);
+  }
+</script>
+
+</body>
+</html>
