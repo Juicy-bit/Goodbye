@@ -227,7 +227,9 @@
         slideshow.remove();
         const content = document.getElementById("letterContent");
         content.classList.add("show");
-        content.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          window.scrollTo({ top: content.offsetTop - 50, behavior: 'smooth' });
+        }, 300);
         return;
       }
       slides[current].classList.add('active');
@@ -235,7 +237,6 @@
   }
 
   window.onload = () => {
-    // preload music
     music.play().catch(() => {});
   };
 </script>
